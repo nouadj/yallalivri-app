@@ -119,10 +119,11 @@ export default function OrderStoreScreen() {
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
     <View style={styles.orderCard}>
-      <Text style={styles.orderTitle}>🛍️ {item.customerName}</Text>
+      <Text style={styles.orderTitle}> 🛵 {item.courierName} </Text>
+      <Text style={styles.orderTitle}>🏠 {item.customerName}</Text>
       <Text style={styles.orderText}>📍 {item.customerAddress}</Text>
       <Text style={styles.orderText}>📞 {item.customerPhone}</Text>
-      <Text style={styles.orderText}>💰 {item.totalAmount} €</Text>
+      <Text style={styles.orderText}>💰 {item.totalAmount} Dzd</Text>
       <Text style={styles.orderStatus}>📌 Statut : {item.status}</Text>
       <Text style={styles.orderDate}>🕒 Dernière mise à jour : {new Date(item.updatedAt).toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</Text>
       <Text style={styles.orderDate}>📅 Créée : {new Date(item.createdAt).toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</Text>

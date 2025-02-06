@@ -1,22 +1,90 @@
 import React, { useEffect, useState } from 'react';
-import { View, ActivityIndicator } from 'react-native';
+import { View, ActivityIndicator, Platform, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Notifications from 'expo-notifications';
+import * as Device from 'expo-device';
 import AppNavigator from './navigation/AppNavigator';
 
 export default function App() {
   const [initialRoute, setInitialRoute] = useState(null);
 
   useEffect(() => {
-    // On vérifie s'il y a déjà un token
-    const checkToken = async () => {
+    // Vérifier et enregistrer le token
+    const checkTokenAndRegisterNotifications = async () => {
       const token = await AsyncStorage.getItem('token');
-      // Si on a un token, on démarre directement sur HomeTabs, sinon Login
       setInitialRoute(token ? 'HomeTabs' : 'Login');
+
+      if (token) {
+        await registerForPushNotifications();
+      }
     };
-    checkToken();
+    
+    checkTokenAndRegisterNotifications();
   }, []);
 
-  // Tant qu'on n'a pas déterminé la route initiale, on affiche un "loading"
+  // 🔥 Fonction pour récupérer et envoyer le token de notification
+  async function registerForPushNotifications() {
+    if (!Device.isDevice) {
+      console.log("❌ Les notifications push ne fonctionnent pas sur un émulateur.");
+      return;
+    }
+
+    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+
+    if (existingStatus !== 'granted') {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+
+    if (finalStatus !== 'granted') {
+      console.log("❌ Permission de notification refusée !");
+      return;
+    }
+
+    const expoPushToken = (await Notifications.getExpoPushTokenAsync()).data;
+    console.log("🔔 Token Expo :", expoPushToken);
+
+    const userId = await getUserId(); // 🔥 On récupère l'ID utilisateur
+    if (userId) {
+      await sendNotificationTokenToBackend(userId, expoPushToken);
+    }
+  }
+
+  // 🔥 Fonction pour récupérer l'ID utilisateur depuis AsyncStorage
+  async function getUserId() {
+    try {
+      const userJson = await AsyncStorage.getItem('user');
+      if (userJson) {
+        const user = JSON.parse(userJson);
+        return user.id;
+      }
+    } catch (error) {
+      console.error("❌ Erreur lors de la récupération de l'utilisateur :", error);
+    }
+    return null;
+  }
+
+  // 🔥 Fonction pour envoyer le token au backend
+  async function sendNotificationTokenToBackend(userId, token) {
+    const authToken = await AsyncStorage.getItem('token');
+    try {
+      const response = await fetch(`http://192.168.1.32:8080/auth/${userId}/notification-token`, {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${authToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ token }),
+      });
+
+      if (!response.ok) throw new Error("❌ Erreur lors de l'envoi du token de notification");
+      console.log("✅ Token de notification enregistré avec succès !");
+    } catch (error) {
+      console.error("❌ Erreur en envoyant le token au backend :", error);
+    }
+  }
+
   if (initialRoute === null) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -25,6 +93,5 @@ export default function App() {
     );
   }
 
-  // On passe la route initiale en prop à AppNavigator
   return <AppNavigator initialRoute={initialRoute} />;
 }

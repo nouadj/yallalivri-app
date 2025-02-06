@@ -111,10 +111,10 @@ export default function OrderCourierScreen() {
 
     renderItem={({ item }) => (
       <View style={styles.orderCard}>
- <Text style={styles.orderTitle}>🛍️ {item.customerName}</Text>
-      <Text style={styles.orderText}>📍 {item.customerAddress}</Text>
+      <Text style={styles.orderTitle}>🏪{item.storeName} 📍 {item.storeAddress}</Text>
+      <Text style={styles.orderTitle}>  {item.customerName} 🏠🛵 {item.customerAddress}</Text>
       <Text style={styles.orderText}>📞 {item.customerPhone}</Text>
-      <Text style={styles.orderText}>💰 {item.totalAmount} €</Text>
+      <Text style={styles.orderText}>💰 {item.totalAmount} Dzd</Text>
       <Text style={styles.orderStatus}>📌 Statut : {item.status}</Text>
       <Text style={styles.orderDate}>🕒 Dernière mise à jour : {new Date(item.updatedAt).toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</Text>
       <Text style={styles.orderDate}>📅 Créée : {new Date(item.createdAt).toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</Text>
@@ -150,12 +150,14 @@ export default function OrderCourierScreen() {
     keyExtractor={(item) => item.id.toString()}
     refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}
     renderItem={({ item }) => (
-      <View style={styles.orderCard}>
-        <Text style={styles.orderTitle}>🛍️ {item.customerName}</Text>
-        <Text style={styles.orderText}>📍 {item.customerAddress}</Text>
+        <View style={styles.orderCard}>
+        <Text style={styles.orderTitle}>🏪{item.storeName} 📍 {item.storeAddress}</Text>
+        <Text style={styles.orderTitle}>  {item.customerName} 🏠🛵 {item.customerAddress}</Text>
         <Text style={styles.orderText}>📞 {item.customerPhone}</Text>
-        <Text style={styles.orderText}>💰 {item.totalAmount} €</Text>
+        <Text style={styles.orderText}>💰 {item.totalAmount} Dzd</Text>
         <Text style={styles.orderStatus}>📌 Statut : {item.status}</Text>
+        <Text style={styles.orderDate}>🕒 Dernière mise à jour : {new Date(item.updatedAt).toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</Text>
+        <Text style={styles.orderDate}>📅 Créée : {new Date(item.createdAt).toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</Text>
 
         {/* Bouton "Prendre cette commande" */}
         <TouchableOpacity style={styles.takeButton} onPress={() => takeOrder(item.id)}>
