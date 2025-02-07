@@ -48,7 +48,11 @@
     "close": "Close",
     "delete": "Delete",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "logout": "Logout",
+    "editProfile": "Edit Profile",
+    "save": "Save",
+     "validate":"confirm"
   },
   "alerts": {
     "error_courier_details": "Error: Unable to retrieve courier details.",
@@ -57,7 +61,12 @@
     "success_order_updated": "Success: Order updated successfully.",
     "error_order_update": "Error: Unable to update order.",
     "success_order_deleted": "Success: Order deleted successfully.",
-    "error_order_delete": "Error: Unable to delete order."
+    "error_order_delete": "Error: Unable to delete order.",
+    "success_profile_updated": "Success: Profile updated successfully.",
+    "error_profile_update": "Error: Unable to update profile.",
+    "error_fill_fields": "Please fill in all fields.",
+    "success_password_updated": "Password successfully updated!",
+    "error_password_update": "Unable to change the password."
   },
   "menu": {
     "home": "Home",
@@ -73,10 +82,20 @@
     "name": "Name",
     "email": "Email",
     "role": "Role",
-    "phone": "Phone"
+    "phone": "Phone",
+    "edit_profile": "Edit Profile"
   },
   "roles": {
     "store": "Merchant",
     "courier": "Courier"
-  }
+  },
+  "statuses": {
+    "CREATED": "Created",
+    "CANCELLED": "Cancelled",
+    "ASSIGNED": "Assigned",
+    "SHIPPED": "Shipped",
+    "RETURNED": "Returned",
+    "DELIVERED": "Delivered"
+}
+
 }

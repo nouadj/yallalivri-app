@@ -20,10 +20,12 @@
     "customer": "العميل",
     "address": "العنوان",
     "phone": "الهاتف",
-    "amount": "المبلغ",
+    "amount": "مبلغ الطلب",
     "updated_at": "آخر تحديث",
     "created_at": "تاريخ الإنشاء",
-    "loading": "جاري التحميل..."
+    "loading": "جاري التحميل...",
+    "deliveryFee": "مبلغ التوصيل",
+    "totalWithDelivery": "المبلغ الكلي"
   },
   "modals": {
     "store_details": "تفاصيل المتجر",
@@ -48,7 +50,11 @@
     "close": "إغلاق",
     "delete": "حذف",
     "yes": "نعم",
-    "no": "لا"
+    "no": "لا",
+    "logout": "خروج",
+    "editProfile": "تعديل الملف الشخصي",
+    "save": "حفظ",
+    "validate": "تأكيد"
   },
   "alerts": {
     "error_courier_details": "خطأ: لا يمكن استرجاع تفاصيل الموصل.",
@@ -57,7 +63,12 @@
     "success_order_updated": "نجاح: تم تحديث الطلب بنجاح.",
     "error_order_update": "خطأ: لا يمكن تحديث الطلب.",
     "success_order_deleted": "نجاح: تم حذف الطلب بنجاح.",
-    "error_order_delete": "خطأ: لا يمكن حذف الطلب."
+    "error_order_delete": "خطأ: لا يمكن حذف الطلب.",
+    "success_profile_updated": "نجاح: تم تحديث الملف الشخصي بنجاح.",
+    "error_profile_update": "خطأ: لا يمكن تحديث الملف الشخصي.",
+    "error_fill_fields": "يرجى ملء جميع الحقول.",
+    "success_password_updated": "تم تحديث كلمة المرور بنجاح!",
+    "error_password_update": "تعذر تغيير كلمة المرور."
   },
   "menu": {
     "home": "الرئيسية",
@@ -73,10 +84,23 @@
     "name": "الاسم",
     "email": "البريد الإلكتروني",
     "role": "الدور",
-    "phone": "الهاتف"
+    "phone": "الهاتف",
+    "edit_profile": "تعديل الملف الشخصي",
+    "change_password": "تغيير كلمة المرور",
+    "old_password": "كلمة المرور القديمة",
+    "new_password": "كلمة المرور الجديدة",
+    "confirm_password": "تأكيد كلمة المرور"
   },
   "roles": {
     "store": "تاجر",
-    "courier": "مندوب"
+    "courier": "موصل"
+  },
+  "statuses": {
+    "CREATED": "تم الإنشاء",
+    "CANCELLED": "تم الإلغاء",
+    "ASSIGNED": "تم التعيين",
+    "SHIPPED": "تم الشحن",
+    "RETURNED": "تم الإرجاع",
+    "DELIVERED": "تم التوصيل"
   }
 }
