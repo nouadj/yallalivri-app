@@ -14,6 +14,7 @@ import {
 import orderService from "../services/orderService";
 import { getCurrentUser } from "../services/authService";
 import courierService from "../services/courierService";
+import { updateUserLocation } from "../services/locationService";
 import { Linking } from "react-native";
 import { useTranslation } from "react-i18next";
 
@@ -39,8 +40,10 @@ export default function OrderStoreScreen() {
     // ✅ Récupérer l'utilisateur connecté
     const fetchUser = async () => {
       const userData = await getCurrentUser();
-      console.log("🟢 Utilisateur récupéré :", userData);
       setUser(userData);
+      if (userData) {
+        await updateUserLocation(userData.id); // 📌 Mise à jour automatique de la position
+      }
       fetchOrders(userData.id); // 🔥 Appel des commandes avec l'ID de l'utilisateur
     };
     fetchUser();
@@ -52,7 +55,6 @@ export default function OrderStoreScreen() {
       const data = await orderService.getOrdersForStore(storeId, 24); // 🔥 Récupère uniquement les commandes des 24h
       setOrders(data);
     } catch (error) {
-      console.error("❌ Erreur lors du chargement des commandes :", error);
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -180,16 +182,16 @@ export default function OrderStoreScreen() {
                 {t("orders.phone")}: {item.customerPhone}
               </Text>
               <Text style={styles.orderText}>
-  {t("orders.amount")}: {item.amount} {t("amount.dzd")}
-</Text>
-<Text style={styles.orderText}>
-  {t("orders.deliveryFee")}: {item.deliveryFee} {t("amount.dzd")}
-</Text>
-<Text style={styles.orderText}>
-  {t("orders.totalWithDelivery")}: {item.amount + item.deliveryFee} {t("amount.dzd")}
-</Text>
+                {t("orders.amount")}: {item.amount} {t("amount.dzd")}
+              </Text>
+              <Text style={styles.orderText}>
+                {t("orders.deliveryFee")}: {item.deliveryFee} {t("amount.dzd")}
+              </Text>
+              <Text style={styles.orderText}>
+                {t("orders.totalWithDelivery")}:{" "}
+                {item.amount + item.deliveryFee} {t("amount.dzd")}
+              </Text>
 
-              
               <Text style={styles.orderStatus}>
                 {t("orders.status")}: {t(`statuses.${item.status}`)}
               </Text>
@@ -339,7 +341,7 @@ export default function OrderStoreScreen() {
               }
               keyboardType="numeric"
             />
-                        <TextInput
+            <TextInput
               style={styles.input}
               placeholder={t("orders.deliveryFee")}
               value={formData.deliveryFee}

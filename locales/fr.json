@@ -1,6 +1,6 @@
 {
   "login": {
-    "welcome": "Bienvenue sur Yalla Livri !",
+    "welcome": "Bienvenue sur Yalla Livri!",
     "email": "Email",
     "password": "Mot de passe",
     "button": "🚀 Se connecter",
@@ -20,10 +20,12 @@
     "customer": "Client",
     "address": "Adresse",
     "phone": "Téléphone",
-    "amount": "Montant",
+    "amount": "Montant de la commande",
     "updated_at": "Dernière mise à jour",
-    "created_at": "Créé le",
-    "loading": "Chargement..."
+    "created_at": "Date de création",
+    "loading": "Chargement...",
+    "deliveryFee": "Frais de livraison",
+    "totalWithDelivery": "Montant total"
   },
   "modals": {
     "store_details": "Détails du magasin",
@@ -36,7 +38,7 @@
     "courier_age": "Âge",
     "close": "Fermer",
     "delete_confirmation": "Confirmation de suppression",
-    "delete_message": "Êtes-vous sûr de vouloir supprimer cette commande ?"
+    "delete_message": "Êtes-vous sûr de vouloir supprimer cette commande?"
   },
   "buttons": {
     "delivered": "Livré",
@@ -49,47 +51,64 @@
     "delete": "Supprimer",
     "yes": "Oui",
     "no": "Non",
-    "logout": "Se déconnecter",
+    "logout": "Déconnexion",
     "editProfile": "Modifier le profil",
     "save": "Enregistrer",
-    "validate":"confirmer"
+    "validate": "Valider",
+    "update_location": "🔄 Mettre à jour ma position"
+  },
+  "alerts": {
+    "error_courier_details": "Erreur: Impossible de récupérer les détails du livreur.",
+    "success_order_created": "Succès: Commande créée avec succès.",
+    "error_order_creation": "Erreur: Impossible de créer la commande.",
+    "success_order_updated": "Succès: Commande mise à jour avec succès.",
+    "error_order_update": "Erreur: Impossible de mettre à jour la commande.",
+    "success_order_deleted": "Succès: Commande supprimée avec succès.",
+    "error_order_delete": "Erreur: Impossible de supprimer la commande.",
+    "success_profile_updated": "Succès: Profil mis à jour avec succès.",
+    "error_profile_update": "Erreur: Impossible de mettre à jour le profil.",
+    "error_fill_fields": "Veuillez remplir tous les champs.",
+    "success_password_updated": "Mot de passe mis à jour avec succès!",
+    "error_password_update": "Impossible de changer le mot de passe."
   },
   "menu": {
     "home": "Accueil",
     "profile": "Profil",
     "orders": "Commandes",
-    "orders_courier": "Commandes Livreur",
+    "orders_courier": "Commandes livreur",
     "archives": "Archives"
   },
   "amount": {
-    "Dzd": "Dzd"
+    "dzd": "DZD"
   },
   "profile": {
     "name": "Nom",
     "email": "Email",
     "role": "Rôle",
     "phone": "Téléphone",
-    "edit_profile": "Éditer le profil",
-    "change_password": "Modifier le mot de passe",
+    "edit_profile": "Modifier le profil",
+    "change_password": "Changer le mot de passe",
     "old_password": "Ancien mot de passe",
     "new_password": "Nouveau mot de passe",
-    "confirm_password": "Confirmer le mot de passe"
-  },
-  "alerts": {
-    "success_profile_updated": "Succès : Profil mis à jour avec succès.",
-    "error_profile_update": "Erreur : Impossible de mettre à jour le profil."
+    "confirm_password": "Confirmer le mot de passe",
+    "location": "📍 Localisation actuelle",
+    "latitude": "Latitude",
+    "longitude": "Longitude"
   },
   "roles": {
     "store": "Commerçant",
     "courier": "Livreur"
   },
   "statuses": {
-    "CREATED": "Créée",
-    "CANCELLED": "Annulée",
-    "ASSIGNED": "Assignée",
-    "SHIPPED": "Expédiée",
-    "RETURNED": "Retournée",
-    "DELIVERED": "Livrée"
-}
-
+    "CREATED": "Créé",
+    "CANCELLED": "Annulé",
+    "ASSIGNED": "Assigné",
+    "SHIPPED": "Expédié",
+    "RETURNED": "Retourné",
+    "DELIVERED": "Livré"
+  },
+  "location": {
+    "current": "Localisation actuelle",
+    "update": "Mettre à jour ma position"
+  }
 }

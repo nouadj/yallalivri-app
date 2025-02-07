@@ -6,7 +6,6 @@ const API_BASE_URL = "http://192.168.1.32:8080/api/users"; // 🔥 Remplace par 
 const getAuthHeaders = async () => {
   const token = await AsyncStorage.getItem('token');
   if (!token) {
-    console.error("❌ Aucun token trouvé !");
     throw new Error("Non Authentifié");
   }
   return {
@@ -35,7 +34,6 @@ export const updateProfile = async (userId, updatedData) => {
 
     return await response.json(); // ✅ Retourne les données mises à jour
   } catch (error) {
-    console.error("❌ Erreur mise à jour profil :", error);
     throw error;
   }
 };
@@ -55,9 +53,15 @@ export const updatePassword = async (userId, oldPassword, newPassword) => {
       throw new Error(errorText);
     }
 
-    return await response.json();
+    // ✅ Vérifie si le backend a retourné une réponse vide
+    const text = await response.text();
+    if (!text) {
+      return { message: "✅ Mot de passe mis à jour avec succès !" }; // Message par défaut
+    }
+
+    return JSON.parse(text); // Si réponse JSON valide
   } catch (error) {
-    console.error("❌ Erreur mise à jour du mot de passe :", error);
     throw error;
   }
 };
+

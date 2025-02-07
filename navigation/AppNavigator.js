@@ -29,7 +29,6 @@ function HomeTabs({ route }) {
   useEffect(() => {
     const fetchUser = async () => {
       const userData = await getCurrentUser();
-      console.log("🟢 Utilisateur récupéré :", userData);
       setUser(userData);
       setLoading(false);
     };

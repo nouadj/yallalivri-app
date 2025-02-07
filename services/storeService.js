@@ -32,7 +32,6 @@ const getStoreById = async (storeId) => {
 
     return await response.json();
   } catch (error) {
-    console.error("❌ Erreur récupération magasin :", error);
     return null;
   }
 };

@@ -13,7 +13,6 @@ export default function ArchiveOrderScreen() {
 
   useEffect(() => {
     const fetchUserAndOrders = async () => {
-      console.log("🟢 Chargement de l'utilisateur...");
       const userData = await getCurrentUser();
       if (userData) {
         setUser(userData);
@@ -28,13 +27,9 @@ export default function ArchiveOrderScreen() {
     try {
       setLoading(true);
       const data = await orderService.getArchivedOrders(userRole, userId);
-      console.log("📦 Commandes archivées :", data);
       setArchivedOrders(data);
     } catch (error) {
-      console.error(
-        "❌ Erreur lors du chargement des commandes archivées :",
-        error
-      );
+
     } finally {
       setLoading(false);
       setRefreshing(false);

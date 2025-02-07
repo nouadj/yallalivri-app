@@ -25,7 +25,6 @@ export default function App() {
   // 🔥 Fonction pour récupérer et envoyer le token de notification
   async function registerForPushNotifications() {
     if (!Device.isDevice) {
-      console.log("❌ Les notifications push ne fonctionnent pas sur un émulateur.");
       return;
     }
 
@@ -38,12 +37,10 @@ export default function App() {
     }
 
     if (finalStatus !== 'granted') {
-      console.log("❌ Permission de notification refusée !");
       return;
     }
 
     const expoPushToken = (await Notifications.getExpoPushTokenAsync()).data;
-    console.log("🔔 Token Expo :", expoPushToken);
 
     const userId = await getUserId(); // 🔥 On récupère l'ID utilisateur
     if (userId) {
@@ -60,7 +57,6 @@ export default function App() {
         return user.id;
       }
     } catch (error) {
-      console.error("❌ Erreur lors de la récupération de l'utilisateur :", error);
     }
     return null;
   }
@@ -79,9 +75,7 @@ export default function App() {
       });
 
       if (!response.ok) throw new Error("❌ Erreur lors de l'envoi du token de notification");
-      console.log("✅ Token de notification enregistré avec succès !");
     } catch (error) {
-      console.error("❌ Erreur en envoyant le token au backend :", error);
     }
   }
 

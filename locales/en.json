@@ -3,7 +3,7 @@
     "welcome": "Welcome to Yalla Livri!",
     "email": "Email",
     "password": "Password",
-    "button": "🚀 Login",
+    "button": "🚀 Log in",
     "error": "Error",
     "error_message": "Login failed. Please check your credentials."
   },
@@ -20,10 +20,12 @@
     "customer": "Customer",
     "address": "Address",
     "phone": "Phone",
-    "amount": "Amount",
-    "updated_at": "Last updated",
-    "created_at": "Created at",
-    "loading": "Loading..."
+    "amount": "Order Amount",
+    "updated_at": "Last Updated",
+    "created_at": "Created At",
+    "loading": "Loading...",
+    "deliveryFee": "Delivery Fee",
+    "totalWithDelivery": "Total Amount"
   },
   "modals": {
     "store_details": "Store Details",
@@ -49,10 +51,10 @@
     "delete": "Delete",
     "yes": "Yes",
     "no": "No",
-    "logout": "Logout",
+    "logout": "Log out",
     "editProfile": "Edit Profile",
     "save": "Save",
-     "validate":"confirm"
+    "validate": "Validate"
   },
   "alerts": {
     "error_courier_details": "Error: Unable to retrieve courier details.",
@@ -65,8 +67,8 @@
     "success_profile_updated": "Success: Profile updated successfully.",
     "error_profile_update": "Error: Unable to update profile.",
     "error_fill_fields": "Please fill in all fields.",
-    "success_password_updated": "Password successfully updated!",
-    "error_password_update": "Unable to change the password."
+    "success_password_updated": "Password updated successfully!",
+    "error_password_update": "Unable to change password."
   },
   "menu": {
     "home": "Home",
@@ -76,14 +78,18 @@
     "archives": "Archives"
   },
   "amount": {
-    "dzd": "Dzd"
+    "dzd": "DZD"
   },
   "profile": {
     "name": "Name",
     "email": "Email",
     "role": "Role",
     "phone": "Phone",
-    "edit_profile": "Edit Profile"
+    "edit_profile": "Edit Profile",
+    "change_password": "Change Password",
+    "old_password": "Old Password",
+    "new_password": "New Password",
+    "confirm_password": "Confirm Password"
   },
   "roles": {
     "store": "Merchant",
@@ -96,6 +102,9 @@
     "SHIPPED": "Shipped",
     "RETURNED": "Returned",
     "DELIVERED": "Delivered"
-}
-
+  },
+  "location": {
+    "current": "Current location",
+    "update": "Update my position"
+  }
 }

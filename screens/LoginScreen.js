@@ -24,18 +24,14 @@ export default function LoginScreen() {
 
   const handleLogin = async () => {
     try {
-      console.log("Envoi de la requête...");
       const response = await login(email, password);
-      console.log("Réponse API:", response);
 
       await AsyncStorage.setItem("token", response.token);
       const user = await getCurrentUser();
-      console.log("Utilisateur mis à jour :", user);
 
       navigation.replace("HomeTabs", { user });
     } catch (error) {
-      console.error("Erreur de connexion:", error);
-      Alert.alert(t("login.error"), t("login.error_message")); // ✅ Message d'erreur traduit
+      Alert.alert(t("login.error"), t("login.error_message"));
     }
   };
 

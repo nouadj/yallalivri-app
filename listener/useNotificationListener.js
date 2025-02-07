@@ -21,7 +21,6 @@ export async function registerForPushNotificationsAsync() {
     }
 
     token = (await Notifications.getExpoPushTokenAsync()).data;
-    console.log("✅ Token de notification :", token);
   } else {
     Alert.alert('Erreur', 'Les notifications ne fonctionnent pas sur un simulateur');
   }

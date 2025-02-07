@@ -6,7 +6,6 @@ const API_BASE_URL = "http://192.168.1.32:8080/api/orders";
 const getAuthHeaders = async () => {
   const token = await AsyncStorage.getItem("token");
   if (!token) {
-    console.error("❌ Aucun token trouvé !");
     throw new Error("Non Authentifié");
   }
   return {
@@ -38,7 +37,6 @@ const orderService = {
       console.log("📦 Réponse API commandes STORE :", data);
       return data;
     } catch (error) {
-      console.error("❌ Erreur récupération commandes STORE :", error);
       return [];
     }
   },
@@ -58,36 +56,37 @@ const orderService = {
       if (!response.ok) throw new Error(`Erreur API : ${response.status}`);
       return await response.json();
     } catch (error) {
-      console.error(`❌ Erreur récupération commandes (${status}):`, error);
       return [];
     }
   },
 
   // ✅ Récupérer uniquement les commandes "CREATED" des dernières X heures
-  getCreatedOrders: async (hours = 5) => {
+  getCreatedOrders: async (idCourier, hours = 5, distance = 20) => {
     try {
       const headers = await getAuthHeaders();
+      
       console.log(
-        `📡 Envoi requête API (CREATED) : ${API_BASE_URL}/status/CREATED?hours=${hours}`
+        `📡 Envoi requête API (CREATED) : ${API_BASE_URL}/status/CREATED?idCourier=${idCourier}&distance=${distance}&hours=${hours}`
       );
-
+  
       const response = await fetch(
-        `${API_BASE_URL}/status/CREATED?hours=${hours}`,
+        `${API_BASE_URL}/status/CREATED?idCourier=${idCourier}&distance=${distance}&hours=${hours}`,
         {
           method: "GET",
           headers,
         }
       );
-
-      if (!response.ok) throw new Error(`Erreur API : ${response.status}`);
-      const data = await response.json();
-      console.log("📦 Réponse API commandes CREATED :", data);
-      return data;
+  
+      if (!response.ok) {
+        throw new Error(`❌ Erreur API (${response.status})`);
+      }
+  
+      return await response.json(); // ✅ Retourne les commandes filtrées
     } catch (error) {
-      console.error("❌ Erreur récupération commandes CREATED :", error);
-      return [];
+      throw error;
     }
   },
+  
 
   // ✅ Créer une nouvelle commande (uniquement pour les magasins)
   createOrder: async (orderData) => {
@@ -103,7 +102,6 @@ const orderService = {
         throw new Error("Erreur lors de la création de la commande");
       return await response.json();
     } catch (error) {
-      console.error("❌ Erreur création commande :", error);
       throw error;
     }
   },
@@ -122,7 +120,6 @@ const orderService = {
         throw new Error("Erreur lors de la modification de la commande");
       return await response.json();
     } catch (error) {
-      console.error("❌ Erreur modification commande :", error);
       throw error;
     }
   },
@@ -145,7 +142,6 @@ const orderService = {
 
       return responseData;
     } catch (error) {
-      console.error("❌ Erreur assignation commande :", error);
       throw error;
     }
   },
@@ -157,16 +153,13 @@ const orderService = {
 
       const headers = await getAuthHeaders();
       const url = `${API_BASE_URL}/courier/${courierId}?status=ASSIGNED`;
-      console.log(`📡 Envoi requête API (ASSIGNED) : ${url}`);
 
       const response = await fetch(url, { method: "GET", headers });
 
       if (!response.ok) throw new Error(`Erreur API : ${response.status}`);
       const data = await response.json();
-      console.log("📦 Réponse API commandes ASSIGNED :", data);
       return data;
     } catch (error) {
-      console.error("❌ Erreur récupération commandes ASSIGNED :", error);
       return [];
     }
   },
@@ -187,10 +180,8 @@ const orderService = {
 
       if (!response.ok) throw new Error(`Erreur API : ${response.status}`);
       const data = await response.json();
-      console.log("📦 Réponse API mise à jour statut :", data);
       return data;
     } catch (error) {
-      console.error("❌ Erreur mise à jour statut commande :", error);
       throw error;
     }
   },
@@ -202,7 +193,6 @@ const orderService = {
           ? `${API_BASE_URL}/store/${userId}`
           : `${API_BASE_URL}/courier/${userId}`;
 
-      console.log(`📡 Récupération des commandes archivées : ${endpoint}`);
 
       const response = await fetch(endpoint, { method: "GET", headers });
 
@@ -214,7 +204,6 @@ const orderService = {
         (order) => order.status === "DELIVERED" || order.status === "RETURNED"
       );
     } catch (error) {
-      console.error("❌ Erreur récupération commandes archivées :", error);
       return [];
     }
   },
@@ -232,7 +221,6 @@ const orderService = {
       // Comme le backend retourne Mono<Void>, il n'y a pas de corps de réponse.
       return;
     } catch (error) {
-      console.error("❌ Erreur lors de la suppression de la commande :", error);
       throw error;
     }
   },

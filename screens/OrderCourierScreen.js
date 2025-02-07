@@ -11,6 +11,8 @@ import {
 import orderService from "../services/orderService";
 import { getCurrentUser } from "../services/authService";
 import storeService from "../services/storeService";
+import { updateUserLocation } from "../services/locationService";
+
 import { Modal, Linking } from "react-native";
 import { useTranslation } from "react-i18next";
 
@@ -28,12 +30,13 @@ export default function OrderCourierScreen() {
 
   useEffect(() => {
     const fetchUserAndOrders = async () => {
-      console.log("🟢 useEffect lancé !");
       const userData = await getCurrentUser();
       if (userData) {
         setUser(userData);
+        await updateUserLocation(userData.id);
         await fetchCreatedOrders();
-        await fetchAssignedOrders(userData.id);
+        await fetchAssignedOrders(userData.id);       
+
       }
     };
     fetchUserAndOrders();
@@ -42,36 +45,35 @@ export default function OrderCourierScreen() {
   // 🔥 Récupérer les commandes "CREATED"
   const fetchCreatedOrders = async () => {
     try {
-      console.log("🚀 fetchCreatedOrders() exécuté !");
       setLoading(true);
-      const data = await orderService.getCreatedOrders(HOURS_LIMIT);
-      console.log("📦 Commandes disponibles après API :", data);
+  
+      const user = await getCurrentUser(); // ✅ Récupérer l'utilisateur connecté
+      if (!user) {
+        setLoading(false);
+        return;
+      }
+  
+      const data = await orderService.getCreatedOrders(user.id, 5, 20);
+
+      
       setAvailableOrders(data);
     } catch (error) {
-      console.error(
-        "❌ Erreur lors du chargement des commandes CREATED :",
-        error
-      );
     } finally {
       setLoading(false);
       setRefreshing(false);
     }
   };
+  
 
   // 🔥 Récupérer les commandes "ASSIGNED"
   const fetchAssignedOrders = async (courierId) => {
     if (!courierId) return;
     try {
-      console.log("🚀 fetchAssignedOrders() exécuté !");
       setLoading(true);
       const data = await orderService.getAssignedOrders(courierId);
-      console.log("📦 Commandes ASSIGNED après API :", data);
       setAssignedOrders(data);
     } catch (error) {
-      console.error(
-        "❌ Erreur lors du chargement des commandes ASSIGNED :",
-        error
-      );
+
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -92,7 +94,6 @@ export default function OrderCourierScreen() {
         );
       }
     } catch (error) {
-      console.error("❌ Erreur lors de la récupération du magasin :", error);
       Alert.alert("Erreur", "Non autorisé ou problème serveur.");
     }
   };
@@ -127,9 +128,7 @@ export default function OrderCourierScreen() {
   // 🔥 Mettre à jour le statut d'une commande assignée
   const updateOrderStatus = async (orderId, newStatus) => {
     try {
-      console.log(
-        `🚀 Mise à jour statut commande ${orderId} vers ${newStatus}`
-      );
+
       await orderService.updateOrderStatus(orderId, newStatus);
       Alert.alert("🎉 Succès", `Commande mise à jour en ${newStatus} !`);
 
