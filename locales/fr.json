@@ -1,0 +1,75 @@
+{
+    "login": {
+      "welcome": "Bienvenue sur Yalla Livri !",
+      "email": "Email",
+      "password": "Mot de passe",
+      "button": "🚀 Se connecter",
+      "error": "Erreur",
+      "error_message": "Échec de la connexion. Veuillez vérifier vos informations."
+    },
+    "orders": {
+      "store_orders": "Commerçant",
+      "create_order": "Créer une commande",
+      "assigned_orders": "📦 Mes commandes assignées",
+      "available_orders": "🚚 Commandes disponibles",
+      "archived_orders": "📜 Commandes archivées",
+      "no_assigned_orders": "Aucune commande assignée",
+      "no_available_orders": "Aucune commande disponible",
+      "no_archived_orders": "Aucune commande archivée",
+      "status": "Statut",
+      "customer": "Client",
+      "address": "Adresse",
+      "phone": "Téléphone",
+      "amount": "Montant",
+      "updated_at": "Dernière mise à jour",
+      "created_at": "Créé le",
+      "loading": "Chargement..."
+    },
+    "modals": {
+      "store_details": "Détails du magasin",
+      "store_address": "Adresse",
+      "store_phone": "Téléphone",
+      "store_type": "Type",
+      "courier_details": "Détails du livreur",
+      "courier_name": "Nom",
+      "courier_phone": "Téléphone",
+      "courier_age": "Âge",
+      "close": "Fermer",
+      "delete_confirmation": "Confirmation de suppression",
+      "delete_message": "Êtes-vous sûr de vouloir supprimer cette commande ?"
+    },
+    "buttons": {
+      "delivered": "Livré",
+      "returned": "Retourné",
+      "take_order": "Prendre cette commande",
+      "update": "Mettre à jour",
+      "create": "Créer",
+      "cancel": "Annuler",
+      "close": "Fermer",
+      "delete": "Supprimer",
+      "yes": "Oui",
+      "no": "Non"
+    },
+    "menu": {
+      "home": "Accueil",
+      "profile": "Profil",
+      "orders": "Commandes",
+      "orders_courier": "Commandes Livreur",
+      "archives": "Archives"
+    },
+    "amount": {
+        "Dzd": "Dzd"
+    },
+    "profile": {
+  "name": "Nom",
+  "email": "Email",
+  "role": "Rôle",
+  "phone": "Téléphone"
+},
+"roles": {
+  "store": "Commerçant",
+  "courier": "Livreur"
+}
+
+  }
+  

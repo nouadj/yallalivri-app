@@ -1,17 +1,17 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const API_BASE_URL = "http://192.168.1.32:8080/api/stores";
 
 // ✅ Fonction pour récupérer les en-têtes d'authentification avec JWT
 const getAuthHeaders = async () => {
-  const token = await AsyncStorage.getItem('token');
+  const token = await AsyncStorage.getItem("token");
   if (!token) {
     console.error("❌ Aucun token trouvé !");
     throw new Error("Non Authentifié");
   }
   return {
-    'Authorization': `Bearer ${token}`,
-    'Content-Type': 'application/json',
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json",
   };
 };
 
@@ -19,9 +19,12 @@ const getAuthHeaders = async () => {
 const getStoreById = async (storeId) => {
   try {
     if (!storeId) throw new Error("❌ Aucun `storeId` fourni !");
-    
+
     const headers = await getAuthHeaders();
-    const response = await fetch(`${API_BASE_URL}/${storeId}`, { method: 'GET', headers });
+    const response = await fetch(`${API_BASE_URL}/${storeId}`, {
+      method: "GET",
+      headers,
+    });
 
     if (!response.ok) {
       throw new Error(`Erreur API : ${response.status}`);
