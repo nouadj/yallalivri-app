@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, RefreshControl, Alert } from 'react-native';
 import orderService from '../services/orderService';
 import { getCurrentUser } from '../services/authService';
+import storeService from '../services/storeService';
+import { Modal, Linking } from 'react-native';
+
 
 export default function OrderCourierScreen() {
   const [user, setUser] = useState(null);
@@ -9,7 +12,10 @@ export default function OrderCourierScreen() {
   const [assignedOrders, setAssignedOrders] = useState([]); // Commandes "ASSIGNED"
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [store, setStore] = useState(null);
+  const [storeModalVisible, setStoreModalVisible] = useState(false);
   
+
   const HOURS_LIMIT = 5; // Temps limite pour afficher les commandes disponibles (5h)
 
   useEffect(() => {
@@ -57,6 +63,23 @@ export default function OrderCourierScreen() {
       setRefreshing(false);
     }
   };
+
+const fetchStoreDetails = async (storeId) => {
+  try {
+    if (!storeId) return;
+    const storeData = await storeService.getStoreById(storeId);
+    if (storeData) {
+      setStore(storeData);
+      setStoreModalVisible(true); // ✅ Ouvre la modal
+    } else {
+      Alert.alert("Erreur", "Impossible de récupérer les détails du magasin.");
+    }
+  } catch (error) {
+    console.error("❌ Erreur lors de la récupération du magasin :", error);
+    Alert.alert("Erreur", "Non autorisé ou problème serveur.");
+  }
+};
+
 
   // 🔄 Rafraîchir toutes les commandes
   const handleRefresh = async () => {
@@ -108,16 +131,19 @@ export default function OrderCourierScreen() {
     data={assignedOrders}
     keyExtractor={(item) => item.id.toString()}
     refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}
-
     renderItem={({ item }) => (
       <View style={styles.orderCard}>
-      <Text style={styles.orderTitle}>🏪{item.storeName} 📍 {item.storeAddress}</Text>
-      <Text style={styles.orderTitle}>  {item.customerName} 🏠🛵 {item.customerAddress}</Text>
-      <Text style={styles.orderText}>📞 {item.customerPhone}</Text>
-      <Text style={styles.orderText}>💰 {item.totalAmount} Dzd</Text>
-      <Text style={styles.orderStatus}>📌 Statut : {item.status}</Text>
-      <Text style={styles.orderDate}>🕒 Dernière mise à jour : {new Date(item.updatedAt).toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</Text>
-      <Text style={styles.orderDate}>📅 Créée : {new Date(item.createdAt).toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</Text>
+        {/* ✅ Nom du magasin cliquable */}
+        <TouchableOpacity onPress={() => fetchStoreDetails(item.storeId)}>
+            <Text style={styles.orderTitle}>🏪 {item.storeName}</Text>
+        </TouchableOpacity>
+
+        <Text style={styles.orderTitle}>  {item.customerName} 🏠🛵 {item.customerAddress}</Text>
+        <Text style={styles.orderText}>📞 {item.customerPhone}</Text>
+        <Text style={styles.orderText}>💰 {item.totalAmount} Dzd</Text>
+        <Text style={styles.orderStatus}>📌 Statut : {item.status}</Text>
+        <Text style={styles.orderDate}>🕒 Dernière mise à jour : {new Date(item.updatedAt).toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</Text>
+        <Text style={styles.orderDate}>📅 Créée : {new Date(item.createdAt).toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</Text>
 
         {/* Boutons pour modifier le statut */}
         <TouchableOpacity 
@@ -138,6 +164,50 @@ export default function OrderCourierScreen() {
   />
 )}
 
+
+
+<Modal visible={storeModalVisible} animationType="slide" transparent={true}>
+  <View style={styles.modalContainer}>
+    <View style={styles.modalContent}>
+      {store ? (
+        <>
+          <Text style={styles.modalTitle}>🏪 Détails du magasin</Text>
+          
+          <View style={styles.infoContainer}>
+            <Text style={styles.label}>📍 Adresse :</Text>
+            <Text style={styles.orderText}>{store.address}</Text>
+          </View>
+
+          <View style={styles.infoContainer}>
+            <Text style={styles.label}>📞 Téléphone :</Text>
+            <TouchableOpacity onPress={() => Linking.openURL(`tel:${store.phone}`)}>
+              <Text style={[styles.orderText]}>
+                {store.phone}
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.infoContainer}>
+            <Text style={styles.label}>📦 Type : </Text>
+            <Text style={styles.orderText}>{store.type}</Text>
+          </View>
+
+          <TouchableOpacity style={styles.cancelButton} onPress={() => setStoreModalVisible(false)}>
+            <Text style={styles.buttonText}>❌ Fermer</Text>
+          </TouchableOpacity>
+        </>
+      ) : (
+        <Text>Chargement...</Text>
+      )}
+    </View>
+  </View>
+</Modal>
+
+
+
+
+
+
 {/* 🟢 Commandes Disponibles */}
 <Text style={styles.title}>🚚 Commandes Disponibles</Text>
 {loading ? (
@@ -151,7 +221,10 @@ export default function OrderCourierScreen() {
     refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}
     renderItem={({ item }) => (
         <View style={styles.orderCard}>
-        <Text style={styles.orderTitle}>🏪{item.storeName} 📍 {item.storeAddress}</Text>
+        {/* ✅ Nom du magasin cliquable */}
+        <TouchableOpacity onPress={() => fetchStoreDetails(item.storeId)}>
+            <Text style={styles.orderTitle}>🏪 {item.storeName}</Text>
+        </TouchableOpacity>
         <Text style={styles.orderTitle}>  {item.customerName} 🏠🛵 {item.customerAddress}</Text>
         <Text style={styles.orderText}>📞 {item.customerPhone}</Text>
         <Text style={styles.orderText}>💰 {item.totalAmount} Dzd</Text>
@@ -215,6 +288,49 @@ const styles = StyleSheet.create({
     fontWeight: 'bold', 
     textAlign: 'center' 
   },
+  modalContainer: { 
+    flex: 1, 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    backgroundColor: 'rgba(0,0,0,0.5)' 
+  },
+  modalContent: { 
+    width: '85%', 
+    padding: 20, 
+    backgroundColor: 'white', 
+    borderRadius: 12 
+  },
+  modalTitle: { 
+    fontSize: 22, 
+    fontWeight: 'bold', 
+    marginBottom: 15, 
+    textAlign: 'center' 
+  },
+  infoContainer: { 
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    marginBottom: 10 
+  },
+  label: { 
+    fontWeight: 'bold', 
+    fontSize: 16, 
+    marginRight: 5 
+  },
+  orderText: { 
+    fontSize: 16 
+  },
+  cancelButton: { 
+    backgroundColor: '#E74C3C', 
+    padding: 12, 
+    borderRadius: 8, 
+    alignItems: 'center', 
+    marginTop: 15 
+  },
+  buttonText: { 
+    color: 'white', 
+    fontSize: 18, 
+    fontWeight: 'bold' 
+  }
   
 });
 

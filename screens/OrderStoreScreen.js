@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TextInput, Button, Alert, Modal, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import orderService from '../services/orderService';
 import { getCurrentUser } from '../services/authService';
+import courierService from '../services/courierService';
+import { Linking } from 'react-native';
 
 export default function OrderStoreScreen() {
   const [user, setUser] = useState(null);
@@ -16,6 +18,9 @@ export default function OrderStoreScreen() {
     totalAmount: '',
     status: 'CREATED',
   });
+const [courier, setCourier] = useState(null);
+const [courierModalVisible, setCourierModalVisible] = useState(false);
+
 
   useEffect(() => {
     // ✅ Récupérer l'utilisateur connecté
@@ -39,6 +44,20 @@ export default function OrderStoreScreen() {
       setLoading(false);
       setRefreshing(false);
     }
+  };
+  
+  const fetchCourierDetails = async (courierId) => {
+
+    if(courierId!=null) {
+        const courierData = await courierService.getCourierById(courierId);
+        if (courierData) {
+          setCourier(courierData);
+          setCourierModalVisible(true);
+        } else {
+          Alert.alert("Erreur", "Impossible de récupérer les détails du livreur.");
+        }
+    }
+
   };
   
 
@@ -119,7 +138,9 @@ export default function OrderStoreScreen() {
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
     <View style={styles.orderCard}>
-      <Text style={styles.orderTitle}> 🛵 {item.courierName} </Text>
+      <TouchableOpacity onPress={() => fetchCourierDetails(item.courierId)}>
+        <Text style={styles.orderTitle}> 🛵 {item.courierName} </Text>
+      </TouchableOpacity>
       <Text style={styles.orderTitle}>🏠 {item.customerName}</Text>
       <Text style={styles.orderText}>📍 {item.customerAddress}</Text>
       <Text style={styles.orderText}>📞 {item.customerPhone}</Text>
@@ -127,6 +148,37 @@ export default function OrderStoreScreen() {
       <Text style={styles.orderStatus}>📌 Statut : {item.status}</Text>
       <Text style={styles.orderDate}>🕒 Dernière mise à jour : {new Date(item.updatedAt).toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</Text>
       <Text style={styles.orderDate}>📅 Créée : {new Date(item.createdAt).toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</Text>
+    
+    
+
+
+      <Modal visible={courierModalVisible} animationType="slide" transparent={true}>
+        <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+             {courier ? (
+             <>
+                <Text style={styles.modalTitle}>🛵 Détails du livreur</Text>
+                <Text style={styles.orderText}>👤 Nom: {courier.name}</Text>
+                <TouchableOpacity onPress={() => Linking.openURL(`tel:${courier.phone}`)}>
+                <Text style={[styles.orderText]}>
+                        📞 Téléphone: {courier.phone}
+                </Text>
+                </TouchableOpacity>
+
+                <Text style={styles.orderText}>🚀 Age: {courier.age} ans</Text>
+                <TouchableOpacity style={styles.cancelButton} onPress={() => setCourierModalVisible(false)}>
+                    <Text style={styles.buttonText}>❌ Fermer</Text>
+                </TouchableOpacity>
+                </>
+            ) : (
+        <Text>Chargement...</Text>
+      )}
+    </View>
+  </View>
+</Modal>
+
+
+
     </View>
   )}
 />
@@ -180,7 +232,7 @@ export default function OrderStoreScreen() {
           </ScrollView>
         </View>
       </Modal>
-    </View>
+</View>
   );
 }
 
