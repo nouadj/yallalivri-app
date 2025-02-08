@@ -35,7 +35,10 @@ export default function OrderStoreScreen() {
   const [courier, setCourier] = useState(null);
   const [courierModalVisible, setCourierModalVisible] = useState(false);
   const { t } = useTranslation();
-
+  const handleCall = (phoneNumber) => {
+    Linking.openURL(`tel:${phoneNumber}`);
+  };
+  
   useEffect(() => {
     // ✅ Récupérer l'utilisateur connecté
     const fetchUser = async () => {
@@ -178,7 +181,7 @@ export default function OrderStoreScreen() {
               <Text style={styles.orderText}>
                 {t("orders.address")}: {item.customerAddress}
               </Text>
-              <Text style={styles.orderText}>
+              <Text style={styles.orderText} onPress={() => handleCall(item.customerPhone)}>
                 {t("orders.phone")}: {item.customerPhone}
               </Text>
               <Text style={styles.orderText}>
@@ -265,15 +268,7 @@ export default function OrderStoreScreen() {
                             Linking.openURL(`tel:${courier.phone}`)
                           }
                         >
-                          <Text
-                            style={[
-                              styles.orderText,
-                              {
-                                color: "blue",
-                                textDecorationLine: "underline",
-                              },
-                            ]}
-                          >
+                          <Text>
                             {t("modals.courier_phone")}: {courier.phone}
                           </Text>
                         </TouchableOpacity>

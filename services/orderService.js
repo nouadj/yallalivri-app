@@ -28,13 +28,11 @@ const orderService = {
         url += `?hours=${hours}`;
       }
 
-      console.log(`📡 Envoi requête API : ${url}`);
 
       const response = await fetch(url, { method: "GET", headers });
 
       if (!response.ok) throw new Error(`Erreur API : ${response.status}`);
       const data = await response.json();
-      console.log("📦 Réponse API commandes STORE :", data);
       return data;
     } catch (error) {
       return [];
@@ -64,10 +62,7 @@ const orderService = {
   getCreatedOrders: async (idCourier, hours = 5, distance = 20) => {
     try {
       const headers = await getAuthHeaders();
-      
-      console.log(
-        `📡 Envoi requête API (CREATED) : ${API_BASE_URL}/status/CREATED?idCourier=${idCourier}&distance=${distance}&hours=${hours}`
-      );
+
   
       const response = await fetch(
         `${API_BASE_URL}/status/CREATED?idCourier=${idCourier}&distance=${distance}&hours=${hours}`,
@@ -168,9 +163,7 @@ const orderService = {
   updateOrderStatus: async (orderId, status) => {
     try {
       const headers = await getAuthHeaders();
-      console.log(
-        `📡 Envoi requête API (UPDATE STATUS) : ${API_BASE_URL}/${orderId}/status`
-      );
+
 
       const response = await fetch(`${API_BASE_URL}/${orderId}/status`, {
         method: "PATCH",

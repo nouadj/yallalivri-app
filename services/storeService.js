@@ -6,7 +6,6 @@ const API_BASE_URL = "http://192.168.1.32:8080/api/stores";
 const getAuthHeaders = async () => {
   const token = await AsyncStorage.getItem("token");
   if (!token) {
-    console.error("❌ Aucun token trouvé !");
     throw new Error("Non Authentifié");
   }
   return {

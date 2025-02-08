@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { registerForPushNotificationsAsync } from "../services/notificationService";
 
+
 const API_URL = "http://192.168.1.32:8080/auth"; // Remplace avec ton URL backend
 
 export async function login(email, password) {

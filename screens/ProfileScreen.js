@@ -128,7 +128,7 @@ export default function ProfileScreen({ navigation }) {
         <TouchableOpacity style={styles.langButton} onPress={() => changeLanguage("ar")}>
           <Text style={styles.btnText}>🇩🇿 العربية</Text>
         </TouchableOpacity>
-        <TouchableOpacity
+         {/*<TouchableOpacity
           style={styles.langButton}
           onPress={() =>
             Alert.alert(
@@ -138,7 +138,7 @@ export default function ProfileScreen({ navigation }) {
           }
         >
           <Text style={styles.btnText}>🇩🇿 ⵣ Tmazight</Text>
-        </TouchableOpacity>
+        </TouchableOpacity>*/}
       </View>
 
       {/* Bouton déconnexion */}

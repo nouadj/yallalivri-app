@@ -1,0 +1,93 @@
+{
+    "login": {
+      "welcome": "Welcome to Yalla Livri!",
+      "email": "Email",
+      "password": "Password",
+      "button": "🚀 Login",
+      "error": "Error",
+      "error_message": "Login failed. Please check your credentials."
+    },
+    "orders": {
+      "store_orders": "Merchant",
+      "create_order": "Create Order",
+      "assigned_orders": "📦 My Assigned Orders",
+      "available_orders": "🚚 Available Orders",
+      "archived_orders": "📜 Archived Orders",
+      "no_assigned_orders": "No assigned orders",
+      "no_available_orders": "No available orders",
+      "no_archived_orders": "No archived orders",
+      "status": "Status",
+      "customer": "Customer",
+      "address": "Address",
+      "phone": "Phone",
+      "amount": "Amount",
+      "updated_at": "Last updated",
+      "created_at": "Created at",
+      "loading": "Loading..."
+    },
+    "modals": {
+      "store_details": "Store Details",
+      "store_address": "Address",
+      "store_phone": "Phone",
+      "store_type": "Type",
+      "courier_details": "Courier Details",
+      "courier_name": "Name",
+      "courier_phone": "Phone",
+      "courier_age": "Age",
+      "close": "Close",
+      "delete_confirmation": "Delete Confirmation",
+      "delete_message": "Are you sure you want to delete this order?"
+    },
+    "buttons": {
+      "delivered": "Delivered",
+      "returned": "Returned",
+      "take_order": "Take this order",
+      "update": "Update",
+      "create": "Create",
+      "cancel": "Cancel",
+      "close": "Close",
+      "delete": "Delete",
+      "yes": "Yes",
+      "no": "No",
+      "logout": "Logout",
+      "editProfile": "Edit Profile",
+      "save": "Save",
+       "validate":"confirm"
+    },
+    "alerts": {
+      "error_courier_details": "Error: Unable to retrieve courier details.",
+      "success_order_created": "Success: Order created successfully.",
+      "error_order_creation": "Error: Unable to create order.",
+      "success_order_updated": "Success: Order updated successfully.",
+      "error_order_update": "Error: Unable to update order.",
+      "success_order_deleted": "Success: Order deleted successfully.",
+      "error_order_delete": "Error: Unable to delete order.",
+      "success_profile_updated": "Success: Profile updated successfully.",
+      "error_profile_update": "Error: Unable to update profile.",
+      "error_fill_fields": "Please fill in all fields.",
+      "success_password_updated": "Password successfully updated!",
+      "error_password_update": "Unable to change the password."
+    },
+    "menu": {
+      "home": "Home",
+      "profile": "Profile",
+      "orders": "Orders",
+      "orders_courier": "Courier Orders",
+      "archives": "Archives"
+    },
+    "amount": {
+      "dzd": "Dzd"
+    },
+    "profile": {
+      "name": "Name",
+      "email": "Email",
+      "role": "Role",
+      "phone": "Phone",
+      "edit_profile": "Edit Profile"
+    },
+    "roles": {
+      "store": "Merchant",
+      "courier": "Courier"
+    }
+  }
+  

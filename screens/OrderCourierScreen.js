@@ -27,7 +27,9 @@ export default function OrderCourierScreen() {
   const { t } = useTranslation();
 
   const HOURS_LIMIT = 5; // Temps limite pour afficher les commandes disponibles (5h)
-
+  const handleCall = (phoneNumber) => {
+    Linking.openURL(`tel:${phoneNumber}`);
+  };
   useEffect(() => {
     const fetchUserAndOrders = async () => {
       const userData = await getCurrentUser();
@@ -162,7 +164,9 @@ export default function OrderCourierScreen() {
                 {" "}
                 {item.customerName} 🏠🛵 {item.customerAddress}
               </Text>
-              <Text style={styles.orderText}>📞 {item.customerPhone}</Text>
+              <Text style={styles.orderText} onPress={() => handleCall(item.customerPhone)}>
+                    📞 {item.customerPhone}
+              </Text>
               <Text style={styles.orderText}>
                 💰 {item.amount} {t("amount.dzd")}
               </Text>
@@ -284,7 +288,9 @@ export default function OrderCourierScreen() {
                 {" "}
                 {item.customerName} 🏠🛵 {item.customerAddress}
               </Text>
-              <Text style={styles.orderText}>📞 {item.customerPhone}</Text>
+              <Text style={styles.orderText} onPress={() => handleCall(item.customerPhone)}>
+                    📞 {item.customerPhone}
+              </Text>
               <Text style={styles.orderText}>
                 💰 {item.amount} {t("amount.dzd")}
               </Text>
