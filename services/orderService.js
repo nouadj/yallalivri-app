@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const API_BASE_URL = "http://192.168.1.32:8080/api/orders";
-
+//const API_BASE_URL = "https://yallalivri-back-production.up.railway.app/api/orders";
+const API_BASE_URL =  "http://192.168.1.32:8080/api/orders"
 // ✅ Fonction pour récupérer les en-têtes d'authentification
 const getAuthHeaders = async () => {
   const token = await AsyncStorage.getItem("token");

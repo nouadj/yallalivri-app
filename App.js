@@ -65,7 +65,9 @@ export default function App() {
   async function sendNotificationTokenToBackend(userId, token) {
     const authToken = await AsyncStorage.getItem('token');
     try {
-      const response = await fetch(`http://192.168.1.32:8080/auth/${userId}/notification-token`, {
+      // const response = await fetch(`https://yallalivri-back-production.up.railway.app/api/auth/${userId}/notification-token`, {
+
+     const response = await fetch(`http://192.168.1.32:8080/api/auth/${userId}/notification-token`, {
         method: 'PATCH',
         headers: {
           'Authorization': `Bearer ${authToken}`,

@@ -1,7 +1,8 @@
 import * as Location from "expo-location";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const API_URL = "http://192.168.1.32:8080/api/users"; // 🔥 Remplace par ton URL backend
+//const API_URL = "https://yallalivri-back-production.up.railway.app/api/users"; // 🔥 Remplace par ton URL backend
+const API_URL =  "http://192.168.1.32:8080/api/users"
 
 // ✅ Fonction pour récupérer la position GPS de l'utilisateur
 export async function getCurrentLocation() {

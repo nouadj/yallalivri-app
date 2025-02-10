@@ -1,6 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { AUTH_API_URL } from "../services/configService.js";
+ //const API_BASE_URL = "https://yallalivri-back-production.up.railway.app/api/users";
+const API_BASE_URL = "http://192.168.1.32:8080/api/users";
 
-const API_BASE_URL = "http://192.168.1.32:8080/api/couriers";
 
 // ✅ Fonction pour récupérer les en-têtes d'authentification avec JWT
 const getAuthHeaders = async () => {

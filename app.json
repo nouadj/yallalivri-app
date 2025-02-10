@@ -19,12 +19,12 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "dz.nadjtech.yallalivriapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "version": "1.0.0",
     "extra": {
       "eas": {
         "projectId": "0dbf39de-033e-451a-89d3-4a86bf7faf1a"

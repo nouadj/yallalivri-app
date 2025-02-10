@@ -18,7 +18,7 @@ const OrderCard = ({ item }) => {
       <Text style={styles.orderTitle}>🛍️ {item.customerName}</Text>
       <Text style={styles.orderText}>📍 {item.customerAddress}</Text>
       <Text style={styles.orderText}>📞 {item.customerPhone}</Text>
-      <Text style={styles.orderText}>💰 {item.totalAmount} Dzd</Text>
+      <Text style={styles.orderText}>💰 {item.amount} Dzd</Text>
       <Text style={styles.orderStatus}>📌 Statut : {item.status}</Text>
       <Text style={styles.orderDate}>
         🕒 Dernière mise à jour : {formatDate(item.updatedAt)}

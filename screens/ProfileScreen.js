@@ -7,12 +7,15 @@ import {
   TextInput,
   Modal,
   Alert,
+  ScrollView,
+  RefreshControl,
 } from "react-native";
 import { getCurrentUser, logout } from "../services/authService";
 import { updateProfile, updatePassword } from "../services/userService";
 import { useTranslation } from "react-i18next";
 import { changeLanguage } from "../locales/i18n";
 import { updateUserLocation } from "../services/locationService";
+import MapView, { Marker } from "react-native-maps";
 
 export default function ProfileScreen({ navigation }) {
   const [user, setUser] = useState(null);
@@ -22,16 +25,20 @@ export default function ProfileScreen({ navigation }) {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [refreshing, setRefreshing] = useState(false);
   const { t } = useTranslation();
 
   useEffect(() => {
-    const fetchUser = async () => {
-      const userData = await getCurrentUser();
-      setUser(userData);
-      if (userData) setEditData({ email: userData.email, phone: userData.phone });
-    };
     fetchUser();
   }, []);
+
+  const fetchUser = async () => {
+    setRefreshing(true);
+    const userData = await getCurrentUser();
+    setUser(userData);
+    if (userData) setEditData({ email: userData.email, phone: userData.phone });
+    setRefreshing(false);
+  };
 
   const handleLogout = async () => {
     await logout();
@@ -40,7 +47,10 @@ export default function ProfileScreen({ navigation }) {
 
   const handleSaveProfile = async () => {
     if (!editData.email || !editData.phone) {
-      Alert.alert(t("alerts.error_profile_update"), t("alerts.fill_all_fields"));
+      Alert.alert(
+        t("alerts.error_profile_update"),
+        t("alerts.fill_all_fields")
+      );
       return;
     }
     try {
@@ -80,7 +90,11 @@ export default function ProfileScreen({ navigation }) {
   if (!user) return <Text>Chargement...</Text>;
 
   return (
-    <View style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={{ paddingBottom: 20 }}
+      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={fetchUser} />}
+    >
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.title}>👤 {t("profile.title") || "Profil"}</Text>
@@ -88,57 +102,97 @@ export default function ProfileScreen({ navigation }) {
 
       {/* Informations utilisateur */}
       <View style={styles.box}>
-        <Text style={styles.info}>📛 {t("profile.name")}: <Text style={styles.bold}>{user.name}</Text></Text>
-        <Text style={styles.info}>📧 {t("profile.email")}: <Text style={styles.bold}>{user.email}</Text></Text>
         <Text style={styles.info}>
-          {t("profile.role")}: <Text style={styles.bold}>{t(`roles.${user.role.toLowerCase()}`)}</Text>{" "}
+          📛 {t("profile.name")}: <Text style={styles.bold}>{user.name}</Text>
+        </Text>
+        <Text style={styles.info}>
+          📧 {t("profile.email")}: <Text style={styles.bold}>{user.email}</Text>
+        </Text>
+        <Text style={styles.info}>
+          {t("profile.role")}:{" "}
+          <Text style={styles.bold}>
+            {t(`roles.${user.role.toLowerCase()}`)}
+          </Text>{" "}
           {user.role === "STORE" ? "🏪" : "🛵"}
         </Text>
-        <Text style={styles.info}>📞 {t("profile.phone")}: <Text style={styles.bold}>{user.phone}</Text></Text>
+        <Text style={styles.info}>
+          📞 {t("profile.phone")}: <Text style={styles.bold}>{user.phone}</Text>
+        </Text>
       </View>
 
       {/* Boutons d'actions */}
       <View style={styles.row}>
-        <TouchableOpacity style={styles.button} onPress={() => setEditModalVisible(true)}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => setEditModalVisible(true)}
+        >
           <Text style={styles.btnText}>✏️ {t("buttons.editProfile")}</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => setPasswordModalVisible(true)}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => setPasswordModalVisible(true)}
+        >
           <Text style={styles.btnText}>🔑 {t("profile.change_password")}</Text>
         </TouchableOpacity>
       </View>
 
-      {/* Informations de localisation */}
+      {/* Informations de localisation avec la carte */}
       <View style={styles.box}>
-        <Text style={styles.info}>
-          📍 {t("location.current")}: <Text style={styles.bold}>{user?.latitude}, {user?.longitude}</Text>
-        </Text>
-        <TouchableOpacity style={styles.locationButton} onPress={() => updateUserLocation(user?.id)}>
-          <Text style={styles.btnText}>🔄 {t("location.update")}</Text>
-        </TouchableOpacity>
+
+
+        {user?.latitude && user?.longitude ? (
+          <MapView
+            style={styles.map}
+            initialRegion={{
+              latitude: user.latitude,
+              longitude: user.longitude,
+              latitudeDelta: 0.05,
+              longitudeDelta: 0.05,
+            }}
+          >
+            <Marker
+              coordinate={{
+                latitude: user.latitude,
+                longitude: user.longitude,
+              }}
+              title={t("location.your_location")}
+            />
+          </MapView>
+        ) : (
+          <Text style={styles.warning}>📌 {t("location.no_location")}</Text>
+        )}
+
+        {/* Bouton "Mettre à jour" affiché uniquement pour STORE si la localisation n'est pas renseignée */}
+        {user?.role === "STORE" && (!user?.latitude || !user?.longitude) && (
+          <TouchableOpacity
+            style={styles.locationButton}
+            onPress={() => updateUserLocation(user?.id)}
+          >
+            <Text style={styles.btnText}>🔄 {t("location.update")}</Text>
+          </TouchableOpacity>
+        )}
       </View>
 
       {/* Sélection de la langue */}
       <View style={styles.row}>
-        <TouchableOpacity style={styles.langButton} onPress={() => changeLanguage("en")}>
+        <TouchableOpacity
+          style={styles.langButton}
+          onPress={() => changeLanguage("en")}
+        >
           <Text style={styles.btnText}>🇬🇧 English</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.langButton} onPress={() => changeLanguage("fr")}>
+        <TouchableOpacity
+          style={styles.langButton}
+          onPress={() => changeLanguage("fr")}
+        >
           <Text style={styles.btnText}>🇫🇷 Français</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.langButton} onPress={() => changeLanguage("ar")}>
+        <TouchableOpacity
+          style={styles.langButton}
+          onPress={() => changeLanguage("ar")}
+        >
           <Text style={styles.btnText}>🇩🇿 العربية</Text>
         </TouchableOpacity>
-         {/*<TouchableOpacity
-          style={styles.langButton}
-          onPress={() =>
-            Alert.alert(
-              "Info",
-              "Nous travaillons actuellement à l'ajout de la langue Tmazight. Vous pouvez nous joindre si vous souhaitez plus d'informations :)"
-            )
-          }
-        >
-          <Text style={styles.btnText}>🇩🇿 ⵣ Tmazight</Text>
-        </TouchableOpacity>*/}
       </View>
 
       {/* Bouton déconnexion */}
@@ -166,7 +220,10 @@ export default function ProfileScreen({ navigation }) {
               keyboardType="phone-pad"
             />
             <View style={styles.modalRow}>
-              <TouchableOpacity style={styles.modalButton} onPress={() => setEditModalVisible(false)}>
+              <TouchableOpacity
+                style={styles.modalButton}
+                onPress={() => setEditModalVisible(false)}
+              >
                 <Text style={styles.btnText}>{t("buttons.cancel")}</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.modalButton} onPress={handleSaveProfile}>
@@ -207,17 +264,23 @@ export default function ProfileScreen({ navigation }) {
               <Text style={styles.errorText}>{t("alerts.passwords_do_not_match")}</Text>
             )}
             <View style={styles.modalRow}>
-              <TouchableOpacity style={styles.modalButton} onPress={() => setPasswordModalVisible(false)}>
+              <TouchableOpacity
+                style={styles.modalButton}
+                onPress={() => setPasswordModalVisible(false)}
+              >
                 <Text style={styles.btnText}>{t("buttons.cancel")}</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.modalButton} onPress={handleChangePassword}>
+              <TouchableOpacity
+                style={styles.modalButton}
+                onPress={handleChangePassword}
+              >
                 <Text style={styles.btnText}>{t("buttons.validate")}</Text>
               </TouchableOpacity>
             </View>
           </View>
         </View>
       </Modal>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -226,7 +289,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 15,
     backgroundColor: "#F5F5F5",
-    justifyContent: "space-between",
   },
   header: { alignItems: "center", marginVertical: 10 },
   title: { fontSize: 24, fontWeight: "bold", color: "#333" },
@@ -277,29 +339,11 @@ const styles = StyleSheet.create({
     padding: 15,
   },
   modalTitle: { fontSize: 20, fontWeight: "bold", textAlign: "center", marginBottom: 10 },
-  input: {
-    borderWidth: 1,
-    borderColor: "#ddd",
-    borderRadius: 6,
-    padding: 10,
-    marginVertical: 5,
-  },
+  input: { borderWidth: 1, borderColor: "#ddd", borderRadius: 6, padding: 10, marginVertical: 5 },
   modalRow: { flexDirection: "row", justifyContent: "space-between", marginTop: 10 },
-  modalButton: {
-    backgroundColor: "#F1C40F",
-    flex: 1,
-    marginHorizontal: 5,
-    paddingVertical: 10,
-    borderRadius: 6,
-    alignItems: "center",
-  },
+  modalButton: { backgroundColor: "#F1C40F", flex: 1, marginHorizontal: 5, paddingVertical: 10, borderRadius: 6, alignItems: "center" },
   errorText: { color: "red", textAlign: "center", marginVertical: 5 },
-  locationButton: {
-    backgroundColor: "#2ECC71",
-    paddingVertical: 10,
-    borderRadius: 8,
-    alignItems: "center",
-    marginTop: 10,
-  },
+  locationButton: { backgroundColor: "#2ECC71", paddingVertical: 10, borderRadius: 8, alignItems: "center", marginTop: 10 },
+  map: { width: "100%", height: 200, marginVertical: 10, borderRadius: 8 },
 });
 

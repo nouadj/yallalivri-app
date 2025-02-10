@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const API_BASE_URL = "http://192.168.1.32:8080/api/users"; // 🔥 Remplace par ton URL backend
-
+//const API_BASE_URL = "https://yallalivri-back-production.up.railway.app/api/users"; // 🔥 Remplace par ton URL backend
+const API_BASE_URL =  "http://192.168.1.32:8080/api/users"
 // ✅ Récupération du token JWT pour l'authentification
 const getAuthHeaders = async () => {
   const token = await AsyncStorage.getItem('token');
